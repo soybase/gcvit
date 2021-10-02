@@ -1,0 +1,13 @@
+services:
+  assets:
+    build:
+      context: .
+      dockerfile: Dockerfile.soybase
+
+  gcvit:
+    build: .
+    volumes_from:
+      - assets:ro
+    restart: always
+    ports:
+      - "${PORT}:8080"

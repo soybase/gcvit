@@ -1,0 +1,18 @@
+FROM alpine:3.14
+
+RUN apk add --update --no-cache ca-certificates perl
+COPY utility/subsample_vcf.pl utility/ingest_vcf.sh /usr/local/bin/
+WORKDIR /app/assets
+
+RUN ingest_vcf.sh Wm82.gnm2.div.Bandillo_Lorenz_2017/glyma.Wm82.gnm2.div.Bandillo_Lorenz_2017.SNPdata.parents-progeny.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Bandillo_Lorenz_2017.SNPdata.parents-progeny_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Jeong_Moon_2019/glyma.Wm82.gnm2.div.Jeong_Moon_2019.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Jeong_Moon_2019.SNPdata_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Lee_Jeong_2015/glyma.Wm82.gnm2.div.Lee_Jeong_2015.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Lee_Jeong_2015.SNPdata_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Song_Hyten_2015/glyma.Wm82.gnm2.div.Song_Hyten_2015.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Song_Hyten_2015_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Torkamaneh_Laroche_2017/glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2017.SNPdata.vcf.gz -qual_min 1000 | gzip -9 > glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2017.SNPdata_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Torkamaneh_Laroche_2019/glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2019.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2019.SNPdata_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Valliyodan_Brown_2021/glyma.Wm82.gnm2.div.Valliyodan_Brown_2021.USB481.vcf.gz -qual_min 1000 | gzip -9 > glyma.Wm82.gnm2.div.Valliyodan_Brown_2021.USB481_sub25k.vcf.gz
+RUN ingest_vcf.sh Wm82.gnm2.div.Wei_Mesquita_2017/glyma.Wm82.gnm2.div.Wei_Mesquita_2017.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Wei_Mesquita_2017.SNPdata_sub25k.vcf.gz
+
+COPY ./assets/ .
+
+VOLUME ["/app/assets"]
