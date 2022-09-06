@@ -21,5 +21,5 @@ shift
 wget -O - ${DATA_STORE_URL}/${vcf} |
   gzip -dc |
     # load only chromosomes
-    awk 'tolower($1) !~ /scaff|contig|nc_/' |
+    awk 'tolower($1) !~ /scaff|contig|nc_/ { sub(/glyma\.Wm82\.[^.]+\./, ""); print }' |
       subsample_vcf.pl ${@:-}
