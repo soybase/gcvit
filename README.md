@@ -1,8 +1,3 @@
-soybase build/deployment:
-```
-docker compose -f docker-compose.soybase.yml up -d --build
-```
-
  # GCViT
 [![DOI](https://zenodo.org/badge/209399439.svg)](https://zenodo.org/badge/latestdoi/209399439)
 
