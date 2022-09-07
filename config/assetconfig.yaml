@@ -12,8 +12,8 @@ Torkamaneh_Laroche_2017:
   name: 102 Canadian accessions
   format: vcf
 
-Bandillo_Lorenz_2017:
-  location: assets/glyma.Wm82.gnm2.div.Bandillo_Lorenz_2017.SNPdata.parents-progeny_sub25k.vcf.gz
+Song_Yan_2017:
+  location: assets/glyma.Wm82.gnm1.div.Song_Yan_2017.SNPs.parents-progeny.vcf.gz
   name: SoyNAM parents and progeny
   format: vcf
 

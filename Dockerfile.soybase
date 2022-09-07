@@ -1,17 +1,44 @@
-FROM alpine:3.14
+#syntax=docker/dockerfile:1
+FROM alpine:3.16 AS base
 
+SHELL ["/bin/sh", "-o", "pipefail", "-c"]
 RUN apk add --update --no-cache ca-certificates perl
 COPY utility/subsample_vcf.pl utility/ingest_vcf.sh /usr/local/bin/
 WORKDIR /app/assets
 
-RUN ingest_vcf.sh Wm82.gnm2.div.Bandillo_Lorenz_2017/glyma.Wm82.gnm2.div.Bandillo_Lorenz_2017.SNPdata.parents-progeny.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Bandillo_Lorenz_2017.SNPdata.parents-progeny_sub25k.vcf.gz
+FROM base AS Jeong_Moon_2019
 RUN ingest_vcf.sh Wm82.gnm2.div.Jeong_Moon_2019/glyma.Wm82.gnm2.div.Jeong_Moon_2019.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Jeong_Moon_2019.SNPdata_sub25k.vcf.gz
+
+FROM base AS Lee_Jeong_2015
 RUN ingest_vcf.sh Wm82.gnm2.div.Lee_Jeong_2015/glyma.Wm82.gnm2.div.Lee_Jeong_2015.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Lee_Jeong_2015.SNPdata_sub25k.vcf.gz
+
+FROM base AS Song_Hyten_2015
 RUN ingest_vcf.sh Wm82.gnm2.div.Song_Hyten_2015/glyma.Wm82.gnm2.div.Song_Hyten_2015.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Song_Hyten_2015_sub25k.vcf.gz
+
+FROM base AS Song_Yan_2017
+RUN ingest_vcf.sh Wm82.gnm1.div.Song_Yan_2017/glyma.Wm82.gnm1.div.Song_Yan_2017.SNPs.parents-progeny.vcf.gz | gzip -9 > glyma.Wm82.gnm1.div.Song_Yan_2017.SNPs.parents-progeny.vcf.gz
+
+FROM base AS Torkamaneh_Laroche_2017
 RUN ingest_vcf.sh Wm82.gnm2.div.Torkamaneh_Laroche_2017/glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2017.SNPdata.vcf.gz -qual_min 1000 | gzip -9 > glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2017.SNPdata_sub25k.vcf.gz
+
+FROM base AS Torkamaneh_Laroche_2019
 RUN ingest_vcf.sh Wm82.gnm2.div.Torkamaneh_Laroche_2019/glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2019.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Torkamaneh_Laroche_2019.SNPdata_sub25k.vcf.gz
+
+FROM base AS Valliyodan_Brown_2021
 RUN ingest_vcf.sh Wm82.gnm2.div.Valliyodan_Brown_2021/glyma.Wm82.gnm2.div.Valliyodan_Brown_2021.USB481.vcf.gz -qual_min 1000 | gzip -9 > glyma.Wm82.gnm2.div.Valliyodan_Brown_2021.USB481_sub25k.vcf.gz
+
+FROM base AS Wei_Mesquita_2017
 RUN ingest_vcf.sh Wm82.gnm2.div.Wei_Mesquita_2017/glyma.Wm82.gnm2.div.Wei_Mesquita_2017.SNPdata.vcf.gz | gzip -9 > glyma.Wm82.gnm2.div.Wei_Mesquita_2017.SNPdata_sub25k.vcf.gz
+
+FROM base AS final
+COPY --link --from=Jeong_Moon_2019 /app/assets/ /app/assets/
+COPY --link --from=Lee_Jeong_2015 /app/assets/ /app/assets/
+COPY --link --from=Song_Hyten_2015 /app/assets/ /app/assets/
+COPY --link --from=Song_Yan_2017 /app/assets/ /app/assets/
+COPY --link --from=Torkamaneh_Laroche_2017 /app/assets/ /app/assets/
+COPY --link --from=Torkamaneh_Laroche_2019 /app/assets/ /app/assets/
+COPY --link --from=Valliyodan_Brown_2021 /app/assets/ /app/assets/
+COPY --link --from=Wei_Mesquita_2017 /app/assets/ /app/assets/
 
 COPY ./assets/ .
 
